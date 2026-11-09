@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="doom">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Marvel Multiverse: Road to Doomsday — Master MCU Binge Checklist</title>
+  <meta name="description" content="The definitive 115-title Marvel Multiverse and MCU binge checklist leading up to Avengers: Doomsday. Track your watch progress, explore eras, and conquer the multiverse.">
+  <meta name="theme-color" content="#06080d">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Real-time Watch Party Libraries (PeerJS WebRTC + QRious QR Code generator) -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+
+  <!-- Ambient Cosmic Background & Particle Starfield -->
+  <div class="cosmic-background" aria-hidden="true">
+    <div class="cosmic-nebula nebula-doom"></div>
+    <div class="cosmic-nebula nebula-purple"></div>
+    <div class="cosmic-nebula nebula-gold"></div>
+    <div class="torchlight-left"></div>
+    <div class="torchlight-right"></div>
+    <div class="gothic-lattice-overlay"></div>
+    <canvas id="starfieldCanvas"></canvas>
+  </div>
+
+  <!-- Celebration Confetti Canvas -->
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+  <!-- Main Application Wrapper -->
+  <div class="app-container">
+
+    <!-- Top Navigation / Utility Bar -->
+    <header class="hero-header">
+      <div class="top-bar">
+        <div class="brand-badge">
+          <span class="pulse-dot"></span>
+          <span>Marvel Multiverse Archive // Phase 1–6</span>
+          <span class="top-marathon-pill" id="topProgressPill"><strong id="statsWatchedCount">0</strong> / <span id="statsTotalCount">115</span> Watched</span>
+        </div>
+
+        <div class="header-controls">
+          <!-- Watch Party & Shared Playlist Button -->
+          <button class="btn-party-trigger" id="openPartyBtn" title="Marvel Multiverse Watch Party (Live Shared Checklist)" aria-label="Open Watch Party">
+            <span class="party-pulse-beacon"></span>
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Watch Party</span>
+            <span class="party-member-counter" id="partyMemberCounter" style="display: none;">1</span>
+          </button>
+
+          <!-- Theme Palette Selector -->
+          <div class="theme-selector" title="Choose Accent Theme">
+            <button class="theme-pill doom active" data-theme="doom" title="Doctor Doom Emerald" aria-label="Emerald theme"></button>
+            <button class="theme-pill arc" data-theme="arc" title="Arc Reactor Cyan" aria-label="Cyan theme"></button>
+            <button class="theme-pill crimson" data-theme="crimson" title="Stark Crimson" aria-label="Crimson theme"></button>
+            <button class="theme-pill vibranium" data-theme="vibranium" title="Vibranium Violet" aria-label="Violet theme"></button>
+          </div>
+
+          <!-- Sound Effects Toggle -->
+          <button class="icon-btn active" id="soundToggleBtn" title="Toggle Sound FX" aria-label="Toggle Sound Effects">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          </button>
+
+          <!-- Share / Export Checklist -->
+          <button class="icon-btn" id="exportBtn" title="Export / Share Checklist" aria-label="Export or Share Checklist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </button>
+
+          <!-- Reset Progress -->
+          <button class="icon-btn" id="resetBtn" title="Reset All Progress" aria-label="Reset Progress">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Poster-Inspired Hero Header Content -->
+      <div class="hero-content">
+        <div class="marvel-studios-badge" aria-label="Marvel Studios">MARVEL STUDIOS</div>
+        
+        <div class="doomsday-main-logo">
+          <div class="avengers-wordmark">AVENGERS</div>
+          <div class="doomsday-wordmark">
+            <span class="wordmark-line left"></span>
+            <span class="doomsday-text">DOOMSD<span class="avengers-a-icon">A</span>Y</span>
+            <span class="wordmark-line right"></span>
+          </div>
+        </div>
+
+        <div class="doomsday-date-tagline">
+          <span>1 2 . 1 8 . 2 6</span> &nbsp; <span class="tagline-is">I S</span> &nbsp; <span class="tagline-doom">D O O M S D <span class="mini-a">A</span> Y</span>
+        </div>
+
+        <p class="hero-description">
+          Prepare for Battleworld. Track all 115 MCU, Defenders, Spider-Verse, and Mutant saga milestones before Victor Von Doom reshapes reality.
+        </p>
+
+        <!-- Doomsday Real-Time Countdown Clock -->
+        <div class="doomsday-countdown-container" id="countdownClock" aria-label="Doomsday Release Countdown">
+          <div class="countdown-header">
+            <span class="countdown-pulse-icon"></span>
+            <span class="countdown-label">COUNTDOWN TO DOOMSDAY // DECEMBER 18, 2026</span>
+          </div>
+
+          <div class="countdown-grid">
+            <div class="countdown-card">
+              <div class="countdown-number" id="countdownDays">000</div>
+              <div class="countdown-unit">DAYS</div>
+            </div>
+            <div class="countdown-colon">:</div>
+            <div class="countdown-card">
+              <div class="countdown-number" id="countdownHours">00</div>
+              <div class="countdown-unit">HOURS</div>
+            </div>
+            <div class="countdown-colon">:</div>
+            <div class="countdown-card">
+              <div class="countdown-number" id="countdownMinutes">00</div>
+              <div class="countdown-unit">MINS</div>
+            </div>
+            <div class="countdown-colon">:</div>
+            <div class="countdown-card seconds-card">
+              <div class="countdown-number pulse-seconds" id="countdownSeconds">00</div>
+              <div class="countdown-unit">SECS</div>
+            </div>
+          </div>
+
+          <div class="countdown-pacing-bar" id="marathonPacingText">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Target Pace: <strong id="pacingTargetNum">Calculating optimal marathon pace...</strong></span>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- Up Next Spotlight Banner -->
+      <section class="next-up-banner" id="nextUpBanner" aria-label="Next Up Spotlight">
+        <!-- Rendered dynamically by app.js -->
+      </section>
+    </header>
+
+    <!-- Interactive Filtering & Controls Toolbar -->
+    <main>
+      <section class="toolbar-section" aria-label="Checklist Controls and Filters">
+        <!-- Search Bar, Sort, and View Modes -->
+        <div class="search-and-view-row">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by title, hero, year, or saga (e.g. Iron Man, Tobey, Wolverine)..." autocomplete="off" />
+            <button class="search-clear-btn" id="searchClearBtn" aria-label="Clear search">✕</button>
+          </div>
+
+          <!-- Sort Select -->
+          <div class="sort-select-wrapper">
+            <select id="sortSelect" class="sort-select" aria-label="Sort Order">
+              <option value="custom">Watchlist Order (Default)</option>
+              <option value="year-asc">Release Year (Oldest First)</option>
+              <option value="year-desc">Release Year (Newest First)</option>
+              <option value="alpha">Alphabetical (A–Z)</option>
+            </select>
+            <svg class="sort-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+
+          <!-- View Mode Toggles (List [Default with Hover Details], Cards, Compact) -->
+          <div class="view-mode-toggles" role="group" aria-label="View Size Switcher">
+            <button class="view-toggle-btn active" id="viewListBtn" title="List View with Interactive Hover Details (Default)" aria-label="List View">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><rect x="3" y="4" width="3" height="4" rx="1"/><rect x="3" y="10" width="3" height="4" rx="1"/><rect x="3" y="16" width="3" height="4" rx="1"/></svg>
+              <span>List</span>
+            </button>
+            <button class="view-toggle-btn" id="viewCardsBtn" title="Cards Grid View" aria-label="Cards View">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="8" rx="1"/><rect x="14" y="3" width="7" height="8" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+              <span>Cards</span>
+            </button>
+            <button class="view-toggle-btn" id="viewCompactBtn" title="Compact Minimal List" aria-label="Compact List">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              <span>Compact</span>
+            </button>
+          </div>
+
+          <!-- Surprise Pick Shortcut -->
+          <button class="btn-primary surprise-btn" id="randomPickBtn" title="Randomly pick an unwatched title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            <span>Surprise Pick</span>
+          </button>
+        </div>
+
+        <!-- Multiverse Category Filter Tabs -->
+        <nav class="filter-tabs-scroll" id="filterTabsScroll" aria-label="Multiverse Universe Filter Tabs">
+          <button class="filter-tab active" data-category="all">
+            <span>All Titles</span>
+            <span class="tab-count">115</span>
+          </button>
+          <button class="filter-tab" data-category="mcu-infinity">
+            <span>MCU Infinity Saga</span>
+            <span class="tab-count">23</span>
+          </button>
+          <button class="filter-tab" data-category="mcu-multiverse">
+            <span>MCU Multiverse Saga</span>
+            <span class="tab-count">27</span>
+          </button>
+          <button class="filter-tab" data-category="defenders">
+            <span>The Defenders Saga</span>
+            <span class="tab-count">14</span>
+          </button>
+          <button class="filter-tab" data-category="spider-verse">
+            <span>Spider-Man & Sony</span>
+            <span class="tab-count">17</span>
+          </button>
+          <button class="filter-tab" data-category="x-men">
+            <span>X-Men & Mutants</span>
+            <span class="tab-count">15</span>
+          </button>
+          <button class="filter-tab" data-category="fantastic-four">
+            <span>Fantastic Four</span>
+            <span class="tab-count">4</span>
+          </button>
+          <button class="filter-tab" data-category="legacy">
+            <span>Marvel Legacy & TV</span>
+            <span class="tab-count">6</span>
+          </button>
+          <button class="filter-tab" data-category="animation">
+            <span>Animation</span>
+            <span class="tab-count">9</span>
+          </button>
+        </nav>
+
+        <!-- Secondary Filters (Status & Media Type) -->
+        <div class="sub-filters-bar">
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <!-- Status Segmented -->
+            <div class="segmented-group" aria-label="Filter by watch status">
+              <button class="segment-btn active" data-status="all">All</button>
+              <button class="segment-btn" data-status="unwatched">Unwatched</button>
+              <button class="segment-btn" data-status="watched">Watched</button>
+              <button class="segment-btn" data-status="optional">Optional</button>
+            </div>
+
+            <!-- Media Type Segmented -->
+            <div class="segmented-group" aria-label="Filter by media format">
+              <button class="segment-btn active" data-type="all">All Formats</button>
+              <button class="segment-btn" data-type="movie">Movies</button>
+              <button class="segment-btn" data-type="series">TV Series</button>
+              <button class="segment-btn" data-type="special">Specials / Anim</button>
+            </div>
+          </div>
+
+          <div class="active-results-indicator" id="resultsIndicator">
+            Showing <strong>115</strong> of 115 titles
+          </div>
+        </div>
+      </section>
+ 
+      <!-- Live Watch Party Sticky HUD Bar -->
+      <section class="party-live-bar" id="partyLiveBar" style="display: none;" aria-label="Live Shared Watch Party Status">
+        <div class="party-live-left">
+          <div class="party-live-status-pill">
+            <span class="live-dot-pulse"></span>
+            <span class="live-status-text" id="liveStatusText">LIVE WATCH PARTY</span>
+          </div>
+          <button class="party-room-chip" id="partyRoomChip" title="Click to copy Room Code" type="button">
+            <span class="chip-label">ROOM:</span>
+            <strong id="partyRoomCodeDisplay">DOOM-0000</strong>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+          <div class="party-members-stack" id="partyMembersStack">
+            <!-- Dynamically populated member avatar badges -->
+          </div>
+        </div>
+        
+        <div class="party-live-center">
+          <div class="party-activity-ticker" id="partyActivityTicker">
+            <span class="ticker-icon">⚡</span>
+            <span class="ticker-text" id="tickerText">Real-time sync active with connected friends</span>
+          </div>
+        </div>
+
+        <div class="party-live-right">
+          <button class="btn-party-bar-action" id="partyShareLinkBtn" title="Copy Direct Invite Link" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            <span>Copy Link</span>
+          </button>
+          <button class="btn-party-bar-action" id="partyManageBtn" title="Party Hub & QR Code" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Hub</span>
+          </button>
+          <button class="btn-party-bar-leave" id="partyLeaveBtn" title="Leave Watch Party" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Leave</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Checklist Dynamic Cards Grid -->
+      <section id="checklistContainer" class="checklist-container grid-view" aria-label="Marvel Checklist Grid">
+        <!-- Rendered dynamically by app.js -->
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-quote">
+        "I will do what I must. Let the Multiverse bear witness."
+      </div>
+      <div>
+        Road to Avengers: Doomsday • Custom Marvel Watchlist Archive • All 115 Items
+      </div>
+    </footer>
+  </div>
+
+  <!-- Personal Note Modal -->
+  <div class="modal-overlay" id="notesModal" role="dialog" aria-modal="true" aria-labelledby="notesModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="notesModalTitle">Personal Note</h3>
+        <button class="modal-close-btn" id="closeNotesBtn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <textarea id="notesTextarea" class="modal-textarea" placeholder="Add your review, favorite quote, or marathon thoughts here..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-primary" id="saveNotesBtn">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share / Export Modal -->
+  <div class="modal-overlay" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="exportModalTitle">Export & Share Progress</h3>
+        <button class="modal-close-btn" id="closeExportBtn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+          Copy your checklist progress to share with friends, or backup/restore your progress data:
+        </p>
+        <textarea id="exportTextarea" class="modal-textarea" readonly style="height: 180px; font-family: monospace; font-size: 0.85rem;"></textarea>
+      </div>
+      <div class="modal-footer">
+        <input type="file" id="importFileInput" accept=".json" style="display: none;" />
+        <button class="btn-secondary" id="importBtn">Import JSON Backup</button>
+        <button class="btn-primary" id="copyExportBtn">Copy to Clipboard</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Watch Party & Live Shared Playlist Modal -->
+  <div class="modal-overlay" id="partyModal" role="dialog" aria-modal="true" aria-labelledby="partyModalTitle">
+    <div class="modal-card party-modal-card">
+      <div class="modal-header">
+        <div class="party-modal-heading">
+          <div class="marvel-studios-badge" style="font-size: 0.65rem; padding: 2px 6px; margin-bottom: 4px;">WATCH PARTY</div>
+          <h3 class="modal-title" id="partyModalTitle">Multiverse Live Shared Checklist</h3>
+        </div>
+        <button class="modal-close-btn" id="closePartyBtn" aria-label="Close Watch Party Modal">✕</button>
+      </div>
+
+      <div class="modal-body party-modal-body">
+        <!-- Persona & Hero Avatar Picker -->
+        <div class="party-profile-section">
+          <label class="party-field-label">YOUR HERO IDENTITY</label>
+          <div class="party-profile-row">
+            <div class="party-avatar-picker" id="partyAvatarPicker" aria-label="Choose Hero Avatar">
+              <button type="button" class="party-avatar-btn active" data-avatar="🦾" title="Doctor Doom">🦾</button>
+              <button type="button" class="party-avatar-btn" data-avatar="⚡" title="Iron Man">⚡</button>
+              <button type="button" class="party-avatar-btn" data-avatar="🕷️" title="Spider-Man">🕷️</button>
+              <button type="button" class="party-avatar-btn" data-avatar="🔮" title="Scarlet Witch">🔮</button>
+              <button type="button" class="party-avatar-btn" data-avatar="🐍" title="Loki">🐍</button>
+              <button type="button" class="party-avatar-btn" data-avatar="🐺" title="Wolverine">🐺</button>
+              <button type="button" class="party-avatar-btn" data-avatar="🛡️" title="Captain America">🛡️</button>
+              <button type="button" class="party-avatar-btn" data-avatar="🌙" title="Moon Knight">🌙</button>
+              <button type="button" class="party-avatar-btn" data-avatar="👑" title="Black Panther">👑</button>
+              <button type="button" class="party-avatar-btn" data-avatar="🏹" title="Hawkeye">🏹</button>
+            </div>
+            <div class="party-name-wrap">
+              <input type="text" id="partyUserNameInput" class="party-text-input" placeholder="Your Display Name (e.g. Doom)" maxlength="20" />
+            </div>
+          </div>
+        </div>
+
+        <!-- State 1: When NOT in a Party (Tabs to Host or Join) -->
+        <div id="partyDisconnectedView" class="party-view-panel">
+          <div class="party-tabs-row">
+            <button type="button" class="party-tab-btn active" id="tabHostBtn">Host New Party</button>
+            <button type="button" class="party-tab-btn" id="tabJoinBtn">Join Friend's Party</button>
+          </div>
+
+          <!-- Tab Content: Host -->
+          <div class="party-tab-content active" id="hostTabContent">
+            <div class="party-feature-highlight">
+              <div class="party-feat-icon">🌐</div>
+              <div class="party-feat-text">
+                <strong>Host a Shared MCU Marathon</strong>
+                <p>Generate an invite link and QR code. When you or friends check off any movie or episode, everyone's checklist updates live in real-time across screens!</p>
+              </div>
+            </div>
+            <button type="button" class="btn-primary party-launch-btn" id="btnCreateParty">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span>Create Watch Party Room</span>
+            </button>
+          </div>
+
+          <!-- Tab Content: Join -->
+          <div class="party-tab-content" id="joinTabContent">
+            <div class="party-join-box">
+              <label class="party-field-label" for="partyRoomCodeInput">ENTER ROOM CODE OR INVITE LINK</label>
+              <div class="party-join-input-wrap">
+                <input type="text" id="partyRoomCodeInput" class="party-text-input" placeholder="e.g. DOOM-7842 or paste invite link..." autocomplete="off" />
+                <button type="button" class="btn-primary" id="btnJoinParty">Join Party</button>
+              </div>
+              <p class="party-hint-text">Ask your friend for their 4-digit room code, or simply open their shared invite link.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- State 2: When IN an Active Party (Live Details, Invite Link, QR, Member list) -->
+        <div id="partyConnectedView" class="party-view-panel" style="display: none;">
+          <div class="party-active-banner">
+            <div class="party-status-indicator">
+              <span class="live-dot-pulse"></span>
+              <span id="partyRoleText">Hosting Watch Party</span>
+            </div>
+            <div class="party-room-code-badge">
+              <span class="room-code-label">CODE:</span>
+              <strong id="partyModalRoomCode">DOOM-0000</strong>
+            </div>
+          </div>
+
+          <!-- Share Section (Link + QR Code) -->
+          <div class="party-share-container">
+            <div class="party-link-col">
+              <label class="party-field-label">SHAREABLE INVITE LINK</label>
+              <div class="party-copy-input-wrap">
+                <input type="text" id="partyInviteUrlInput" class="party-text-input" readonly />
+                <button type="button" class="btn-primary party-copy-btn" id="btnCopyInviteLink">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+              <p class="party-hint-text">Send this link to friends so they can sync up with your playlist instantly.</p>
+            </div>
+
+            <div class="party-qr-col">
+              <label class="party-field-label">SCAN TO JOIN (MOBILE)</label>
+              <div class="party-qr-wrapper">
+                <canvas id="partyQrCanvas" width="120" height="120" class="party-qr-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connected Members -->
+          <div class="party-members-section">
+            <div class="party-section-head">
+              <label class="party-field-label" style="margin-bottom: 0;">CONNECTED SQUAD (<span id="partyMembersCount">1</span>)</label>
+              <span class="party-sync-state-tag" id="partySyncTag">⚡ In Real-time Sync</span>
+            </div>
+            <div class="party-members-list" id="partyMembersList">
+              <!-- Dynamically populated member cards -->
+            </div>
+          </div>
+
+          <!-- Live Activity History -->
+          <div class="party-history-section">
+            <label class="party-field-label">PARTY ACTIVITY FEED</label>
+            <div class="party-history-log" id="partyHistoryLog">
+              <div class="party-log-item empty">No checks yet. Mark any movie or episode to broadcast live!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer party-modal-footer">
+        <div id="partyFooterActions" style="display: flex; gap: 0.75rem; width: 100%; justify-content: flex-end;">
+          <button type="button" class="btn-secondary" id="btnClosePartyModal">Close</button>
+          <button type="button" class="btn-party-danger" id="btnModalLeaveParty" style="display: none;">Leave Watch Party</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/movies-data.js"></script>
+  <script src="js/episodes-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

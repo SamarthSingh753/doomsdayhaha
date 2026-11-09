@@ -1,0 +1,21 @@
+{
+  "name": "marvel-doomsday-binge-checklist",
+  "version": "1.0.0",
+  "description": "Ultra-sleek Marvel Multiverse & MCU Binge Checklist leading up to Avengers: Doomsday",
+  "scripts": {
+    "build": "echo 'Static build ready'",
+    "dev": "npx serve . -l 3000",
+    "start": "npx serve . -l 3000",
+    "preview": "npx serve . -l 3000"
+  },
+  "keywords": [
+    "marvel",
+    "mcu",
+    "avengers-doomsday",
+    "checklist",
+    "binge-tracker",
+    "multiverse"
+  ],
+  "author": "Antigravity",
+  "license": "MIT"
+}
